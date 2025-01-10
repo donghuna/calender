@@ -158,6 +158,10 @@ echo '<tbody>';
 $date = strtotime(date('Y', $now).'-01-01');
 $first_weekdays = array();
 
+function get_days_in_month($year, $month) {
+  return (int) (new DateTime("$year-$month-01"))->format('t');
+}
+
 for($x = 1; $x <= 12; $x++) {
   $first_weekdays[$x] = date('N', strtotime(date('Y', $now).'-'.$x.'-01'));
   $$x = false; // Set a flag for each month so we can track first days below
@@ -179,7 +183,7 @@ while($month <= 12) {
     }
     else {
       // Ensure that we have a valid date
-      if($day > cal_days_in_month(CAL_GREGORIAN, $month, date('Y', $now))) {
+      if($day > get_days_in_month(date('Y', $now), $month)) { 
         $dates[$month][$x] = 0;
         
       }
@@ -242,7 +246,7 @@ else {
     // Start the inner loop around 12 months
     while($month <= 12) {
       // If we’ve reached a point in the date matrix where the resulting date would be invalid (e.g. February 30th), leave the cell blank
-      if($day > cal_days_in_month(CAL_GREGORIAN, $month, date('Y', $now))) {
+      if($day > get_days_in_month(date('Y', $now), $month)) { 
         echo '<td></td>';
         $month++;
         continue;
